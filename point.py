@@ -39,7 +39,8 @@ def point_json_serialize(obj):
         p_dir = {}
         p_dir["lat"] = obj.lat
         p_dir["lon"] = obj.lon
-        p_dir["elv"] = obj.elv
+        if obj.elv:
+            p_dir["elv"] = obj.elv
         p_dir["created"] = obj.creation_time.isoformat()
         p_dir["type"] = "Point"
         return p_dir
@@ -50,7 +51,11 @@ def point_object_hook(dct):
     if ("type" in dct) and (dct["type"] == "Point"):
         cd_str = dct["created"]
         cd_dt = datetime.datetime.fromisoformat(cd_str)
-        return Point(dct["lat"], dct["lon"], dct["elv"], cd_dt)
+        if "elv" in dct:
+            elv = dct["elv"]
+        else:
+            elv = None
+        return Point(dct["lat"], dct["lon"], elv, cd_dt)
     return dct
 
 

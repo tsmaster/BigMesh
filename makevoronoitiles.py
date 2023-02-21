@@ -496,6 +496,11 @@ print("vertices:", vor.vertices)
 
 # write json
 import json
+import glob
+import os
+
+for fn in glob.glob("Tiles/*.json"):
+    os.unlink(fn)
 
 with open("Tiles/voronoi.json", "wt") as vf:
     data = {}
@@ -523,6 +528,62 @@ with open("Tiles/voronoi.json", "wt") as vf:
     data["regions"] = region_list
 
     vf.write(json.dumps(data, indent=2))
+
+# make tile objects
+import tile
+import point
+
+print("going to try to save %d regions" % len(vor.regions))
+print("I have %d points" % len(vor.points))
+
+region_to_point_map = {}
+for pi in range(len(vor.points)):
+    ri = vor.point_region[pi]
+    region_to_point_map[ri] = pi
+
+
+tiles = []
+
+for ri, r in enumerate(vor.regions):
+    if -1 in r:
+        continue
+    if len(r) == 0:
+        continue
+
+    if ri not in region_to_point_map:
+        print("error, running off end of points")
+        break
+
+    t = tile.Tile()
+    pi = region_to_point_map[ri]
+    p = vor.points[pi]
+    tile_centroid = point.Point(p[1], p[0], None, None)
+    t.centroid_lat_lon = tile_centroid
+    t.tile_id = pi
+
+    verts = []
+    for vi in r:
+        p = vor.vertices[vi]
+        pt = point.Point(p[1], p[0], None, None)
+        verts.append(pt)
+    t.verts_lat_lon = verts
+    t.make_bbox_lat_lon()
+
+    # todo more population
+
+    tiles.append(t)
+
+for c in cities:
+    for t in tiles:
+        if t.point_in_tile_lat_lon(c.lat, c.lon):
+            t.city_list.append(c.name)
+            if c.state_name not in t.state_list:
+                t.state_list.append(c.state_name)
+                t.state_list.sort()
+
+for t in tiles:
+    fn = "Tiles/tile_%04d.json" % (t.tile_id)
+    t.to_json(fn)
 
 for region in vor.regions:
     if -1 in region:
