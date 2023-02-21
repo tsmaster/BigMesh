@@ -1,0 +1,140 @@
+I-90 Seattle to Boston
+Seattle, WA
+Ellensburg, WA
+Spokane, WA
+Coeur d'Alene, ID
+Missoula, MT
+Butte, MT
+Bozeman, MT
+Billings, MT
+Bismarck, ND
+Fargo, ND
+Minneapolis, MN
+Eau Claire, WI
+Madison, WI
+Milwaukee, WI
+Chicago, IL
+Fort Wayne, IN
+Toledo, OH
+Cleveland, OH
+Pittsburgh, PA
+Harrisburg, PA
+Allentown, PA
+New York, NY
+Albany, NY
+Boston, MA
+
+Northern Branch
+Cleveland, OH
+Erie, PA
+Buffalo, NY
+Syracuse, NY
+Albany, NY
+
+
+I-95 Boston to Miami
+Boston, MA
+Worcester, MA
+Springfield, MA
+New Haven, CT
+New York, NY
+Philadelphia, PA
+Wilmington, DE
+Baltimore, MD
+Washington, DC
+Richmond, VA
+Rocky Mount, NC
+Fayetteville, NC
+Wilmington, NC
+Charleston, SC
+Savannah, GA
+Jacksonville, FL
+Daytona Beach, FL
+Orlando, FL
+Miami, FL
+
+Miami to Austin
+Miami, FL
+Tampa, FL
+Gainesville, FL
+Tallahassee, FL
+Mobile, AL
+New Orleans, LA
+Lafayette, LA
+Beaumont, TX
+Houston, TX
+Austin, TX
+
+Austin to San Diego
+Austin, TX
+Fort Bliss, TX
+Las Cruces, NM
+Tucson, AZ
+Yuma, AZ
+San Diego, CA
+
+San Diego to Bellingham
+San Diego, CA
+Los Angeles, CA
+San Francisco, CA
+Sacramento, CA
+Redding, CA
+Yreka, CA
+Ashland, OR
+Medford, OR
+Grants Pass, OR
+Roseburg, OR
+Eugene, OR
+Salem, OR
+Portland, OR
+Vancouver, WA
+Chehalis, WA
+Centralia, WA
+Olympia, WA
+Tacoma, WA
+Seattle, WA
+Everett, WA
+Mt Vernon, WA
+Bellingham, WA
+
+Route 66
+Santa Monica, CA
+Los Angeles, CA
+San Bernadino, CA
+Needles, CA
+Oatman, AZ
+Kingman, AZ
+Seligman, AZ
+Williams, AZ
+Flagstaff, AZ
+Winslow, AZ
+Holbrook, AZ
+Laguna, NM
+Los Lunas, NM
+Albuquerque, NM
+Santa Fe, NM
+Gallup, NM
+Glenrio, NM
+Adrian, TX
+Amarillo, TX
+Conway, TX
+Groom, TX
+Shamrock, TX
+Texola, OK
+Elk City, OK
+Oklahoma City, OK
+Tulsa, OK
+Quapaw, OK
+Riverton, KS
+Baxter Springs, KS
+Galena, KS
+Joplin, MO
+Springfield, MO
+St. Louis, MO
+Hamel, IL
+Springfield, IL
+Gardner, IL
+Wlco Corners, IL
+Joliet, IL
+Chicago, IL
+

@@ -1,0 +1,30 @@
+Bounding box of continental US
+N: 49
+S: 25
+W: -125
+E: -65
+
+Alaska:
+N: 75
+W: -170
+S: 50
+E: -140
+
+Canada:
+N: 85
+S: 49
+W: -140
+E: -50
+
+Mexico:
+N: 33
+W: -120
+S: 20
+E: -85
+
+Central America:
+N: 20
+W: -95
+S: 7
+E: -75
+

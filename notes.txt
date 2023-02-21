@@ -1,0 +1,92 @@
+https://nationalmap.gov/epqs/pqs.php?y=36.1251958&x=-115.3150863&output=json&units=Meters
+
+a simple google search on "USGS Elevation Query Service API" pointed to http://ned.usgs.gov/epqs/ (different address from the question you linked. And the API seems extremely straight forward.
+
+Here is an example call to Las Vegas http://nationalmap.gov/epqs/pqs.php?x=36.1251958&y=-115.3150863&output=json&units=Meters
+
+The problem is that as per their website "If unable to find data at the requested point, this service returns -1000000" and I personally couldn't find any location that they have location (tried Las Vegas and San Francisco).
+
+Alternatively, Google have an elevation API, that I can only assume it's pretty damn good considering Google Maps. Here you can see the docs https://developers.google.com/maps/documentation/elevation/start and here is an example query https://maps.googleapis.com/maps/api/elevation/json?locations=39.7391536,-104.9847034
+
+For the actual call itself, suggest is to use OkHttp (http://square.github.io/okhttp/) or Retrofit (which uses OkHttp) to do threading for you), but a basic code is:
+
+OkHttpClient client = new OkHttpClient();
+
+String getElevation(String url) throws IOException {
+  Request request = new Request.Builder()
+      .url(url)
+      .build();
+
+  Response response = client.newCall(request).execute();
+  return response.body().string();
+}
+then it's just parse the Json string
+
+
+
+https://epqs.nationalmap.gov/v1/docs
+
+
+https://apps.nationalmap.gov/bulkpqs/ (lon/lat, no more than 500 points in one file)
+
+
+PyrOSM
+https://pyrosm.readthedocs.io/en/latest/index.html
+
+OSMnx
+https://github.com/gboeing/osmnx
+
+Natural Earth Shapefiles
+https://www.naturalearthdata.com/downloads/
+
+PyShp
+https://github.com/GeospatialPython/pyshp#reading-shapefiles-from-zip-files
+
+
+OverPy
+https://python-overpy.readthedocs.io/en/latest/introduction.html
+
+OSMPythonTools
+https://wiki.openstreetmap.org/wiki/OSMPythonTools
+
+osmpbfreader Rust crate
+https://github.com/TeXitoi/osmpbfreader-rs
+using this for bbox calc of PBF files
+
+
+
+----------------------------------------
+Things to put in a tile.json
+
+tile ID
+list of vertices (as lat-lon)
+list of neighboring tile IDs
+center point
+  lat-lon
+  elevation
+list of waypoints, edge crossings of highways
+list of city info:
+  name
+  state
+  population
+  center (lat-lon)
+  polygon (lat-lon list)
+bounding box of tile (lat-lon)
+transform from parent coord system to tile coord system
+  globe CS:
+    X pierces equator, prime meridian
+    Y pierces equator, 90 degrees E
+    Z pierces north pole
+  tile CS:
+    Y goes north (if possible)
+    X goes east
+    Z goes local "up"
+transform from tile to world (inverse of above)
+boundary polylines
+
+distance table
+  for each city and waypoint
+    distance, time to all other cities, waypoints
+
+
+list of states touched

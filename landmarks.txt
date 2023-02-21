@@ -1,0 +1,109 @@
+Neah Bay, WA 48.38091, -124.62840
+Peace Arch crossing, WA  48.99377, -122.73326
+Astoria, OR 46.20553, -123.90331
+SE corner of WA(+ID, +OR) 46.01130, -116.94347
+NE corner of WA(+ID, +CAN) 48.99016, -117.05333
+Leavenworth, WA 47.59416, -120.66234
+Rainbow Market, Snohomish, WA 47.79797, -122.06576
+Tracyton Library, Tracyton, WA 47.60852, -122.65465
+Plain Hardware, Plain, WA 47.75867, -120.65783
+Largest Sitka Spruce, Quinault, WA 47.47797, -123.82981
+
+Pheasant Lane Mall, Nashua, NH 42.70088, -71.43747
+
+77 Mass Ave, Cambridge, MA 42.35915, -71.09344
+
+Miami, FL 25.75877, -80.21408
+
+Lea's Lunchroom, Lecompte, LA 31.08841, -92.39620
+
+Fancy Sushi, Surf City, NC 34.42782, -77.54397
+
+Lincoln Memorial, Washington, DC 38.88927, -77.05015
+
+Baltimore Airport, Baltimore, MD 39.17793, -76.66930
+
+Wilmington, DE 39.73777, -75.55076
+
+Philadelphia Museum of Art, Philadelphia, PA 39.96531, -75.18068
+
+Times Square, NYC, NY 40.75798, -73.98555
+
+Springfield, MA 42.10229, -72.58162
+Worcester, MA 42.26510, -71.80159
+
+Manchester, NH 42.99258, -71.45552
+
+Portland, ME 43.65991, -70.24703
+Augusta, ME 44.31991, -69.78011
+
+Tijuana, MX 32.52485, -117.11450
+
+El Cajon, CA 32.79654, -116.96069
+Vacaville, CA 38.35892, -121.99106
+Smith River, CA 41.97177, -124.18283
+
+Tillamook, OR 45.45630, -123.84775
+
+London, UK 51.53027, -0.13388
+Plymouth, UK 50.36753, -4.15487
+John O' Groats, UK 58.62635, -3.07821
+
+Dublin, IR 53.33185, -6.28622
+
+Brandenburg Gate, Berlin, Germany 52.51624, 13.37765
+
+Nurburgring, Nurburg, Germany 50.33559, 6.94772
+
+Arc de Triomphe, Paris, France 48.87376, 2.29505
+
+Colosseum, Rome 41.89023, 12.49232
+
+
+Halifax Nova Scotia, Canada 44.64911, -63.56185
+
+Quebec City Quebec, Canada 46.81133, -71.20833
+
+Vladivostok, Russia 43.13916, 131.90069
+
+Pyongyang, North Korea 38.98298, 125.74834
+
+Seoul, South Korea 37.53378, 126.93487
+
+Tokyo, Japan 35.68193, 139.78887
+
+Taipei, Taiwan 25.01354, 121.55156
+
+Mumbai, India 18.98692, 72.81621
+
+Baghdad, Iraq 33.32833, 44.25176
+
+Cairo, Egypt 30.11434, 31.15606
+
+Casablanca, Morocco 33.51172, -7.69160
+
+Cape Town, South Africa, -34.00932, 18.36797
+
+Antananarivo, Madagascar, -18.88799, 47.45977
+
+Melbourne, Australia -37.85091, 144.93047
+Sydney, Australia -33.86348, 151.12676
+Adelaide, Australia -34.95115, 138.55840
+Perth, Australia -31.87046, 115.79473
+
+Tierra del Fuego, Chile -53.99986, -69.99854
+
+La Paz, Bolivia -16.53585, -68.1845
+
+Lima, Peru -12.10883, -77.10635
+
+Rio de Janiero, Brazil -22.86195, -43.26846
+Sao Paulo, Brazil -23.54858, -46.74014
+
+Caracas, Venezuela 10.41791, -66.91104
+
+Panama City, Panama 8.95594, -79.53433
+
+Mexico City, Mexico 19.43064, -99.13394
+
+San Antonio, TX 29.41596, -98.48574
