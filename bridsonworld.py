@@ -2,7 +2,8 @@ import math
 import random
 
 import point
-#import usgsfetch
+
+# import usgsfetch
 import googlefetch
 
 pointlist = point.read_pointlist_from_json("points.json")
@@ -28,7 +29,9 @@ def point_to_index(p):
 
     return (i_e, i_n)
 
-background_grid = {} #to be indexed by lat,lon integer pairs
+
+background_grid = {}  # to be indexed by lat,lon integer pairs
+
 
 def insert_point_in_grid(p):
     idx = point_to_index(p)
@@ -39,19 +42,17 @@ def insert_point_in_grid(p):
 
     background_grid[idx] = old_list
 
+
 def can_insert_in_grid(p):
-    if ((p.lon < -180) or
-        (p.lon > 180) or
-        (p.lat < -89) or
-        (p.lat > 89)):
+    if (p.lon < -180) or (p.lon > 180) or (p.lat < -89) or (p.lat > 89):
         return False
-    
+
     idx = point_to_index(p)
 
     ix, iy = idx
 
-    for probe_x in range(ix-2, ix+3):
-        for probe_y in range(iy-2, iy+3):
+    for probe_x in range(ix - 2, ix + 3):
+        for probe_y in range(iy - 2, iy + 3):
             probe_idx = (probe_x, probe_y)
             if probe_idx in background_grid:
                 for stored_point in background_grid[probe_idx]:
@@ -60,6 +61,7 @@ def can_insert_in_grid(p):
                         return False
     return True
 
+
 k = 30
 
 open_set = []
@@ -67,13 +69,17 @@ open_set = []
 added_points = []
 
 for p in pointlist:
-    if ((p.lon >= limit_west - 2) and (p.lon <= limit_east + 2) and
-        (p.lat >= limit_south - 2) and (p.lat <= limit_north + 2)):
-        #print ("found point:", p)
+    if (
+        (p.lon >= limit_west - 2)
+        and (p.lon <= limit_east + 2)
+        and (p.lat >= limit_south - 2)
+        and (p.lat <= limit_north + 2)
+    ):
+        # print ("found point:", p)
         open_set.append(p)
         insert_point_in_grid(p)
-    
-        
+
+
 while open_set:
     p_idx = random.randrange(len(open_set))
     p = open_set[p_idx]
@@ -87,9 +93,9 @@ while open_set:
     epsilon = 0.000001
 
     inserted = False
-    
+
     for j in range(k):
-        theta = 2*math.pi*(seed + float(j) / k)
+        theta = 2 * math.pi * (seed + float(j) / k)
         r = point_spacing + epsilon
         new_east = p.lon + r * math.cos(theta)
         new_north = p.lat + r * math.sin(theta)
@@ -108,13 +114,13 @@ while open_set:
     else:
         added_points.append(candidate_point)
         open_set.append(candidate_point)
-            
+
 print("Found %d new points" % len(added_points))
 
 for p in added_points:
-    #new_point = usgsfetch.fetch(p.lat, p.lon)
+    # new_point = usgsfetch.fetch(p.lat, p.lon)
     new_point = googlefetch.fetch(p.lat, p.lon)
     if new_point:
         pointlist.append(new_point)
 
-point.write_pointlist_to_json('points.json', pointlist)
+point.write_pointlist_to_json("points.json", pointlist)

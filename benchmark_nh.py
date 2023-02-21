@@ -1,16 +1,16 @@
 # benchmarking getting roads from NH using PyrOSM
 
 import os
-os.environ['USE_PYGEOS'] = '0'
-import geopandas
 
+os.environ["USE_PYGEOS"] = "0"
+import geopandas
 
 
 from pyrosm import OSM, get_data
 import time
 
 # Initialize (downloads data automatically for New Hampshire)
-fp = get_data("new_hampshire", directory = "OSM")
+fp = get_data("new_hampshire", directory="OSM")
 osm = OSM(fp)
 
 # Parse roads and time it

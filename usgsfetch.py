@@ -4,8 +4,11 @@ import requests
 
 import point
 
+
 def fetch(lat, lon):
-    q = "https://nationalmap.gov/epqs/pqs.php?y={}&x={}&output=json&units=Meters".format(lon, lat)
+    q = "https://nationalmap.gov/epqs/pqs.php?y={}&x={}&output=json&units=Meters".format(
+        lon, lat
+    )
 
     r = requests.get(q)
 
@@ -14,7 +17,7 @@ def fetch(lat, lon):
     rj_res = rj["USGS_Elevation_Point_Query_Service"]
 
     rj_elev = rj_res["Elevation_Query"]
-    
+
     lat = rj_elev["y"]
     lon = rj_elev["x"]
     elv = rj_elev["Elevation"]
@@ -29,7 +32,7 @@ def fetch(lat, lon):
     except TypeError(e):
         print("got bogus elev")
         return None
-    
+
     if elv == -1000000:
         print("got OOB elev")
         return None
@@ -38,7 +41,6 @@ def fetch(lat, lon):
     print("fetched", ret_pt)
 
     return ret_pt
-
 
 
 if __name__ == "__main__":

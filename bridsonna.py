@@ -60,14 +60,15 @@ limit_east = -65
 
 delta_east = abs(limit_west - limit_east)
 delta_north = abs(limit_north - limit_south)
-print ("extent east-west:", delta_east)
-print ("extent north-south:", delta_north)
+print("extent east-west:", delta_east)
+print("extent north-south:", delta_north)
 
-print ("area in square degrees:", delta_east * delta_north)
+print("area in square degrees:", delta_east * delta_north)
 
 point_spacing = 1.0
 
 cell_width = point_spacing / math.sqrt(2.0)
+
 
 def point_to_index(p):
     delta_east = p.lon - limit_west
@@ -77,7 +78,9 @@ def point_to_index(p):
 
     return (i_e, i_n)
 
-background_grid = {} #to be indexed by lat,lon integer pairs
+
+background_grid = {}  # to be indexed by lat,lon integer pairs
+
 
 def insert_point_in_grid(p):
     idx = point_to_index(p)
@@ -88,19 +91,22 @@ def insert_point_in_grid(p):
 
     background_grid[idx] = old_list
 
+
 def can_insert_in_grid(p):
-    if ((p.lon < limit_west) or
-        (p.lon > limit_east) or
-        (p.lat < limit_south) or
-        (p.lat > limit_north)):
+    if (
+        (p.lon < limit_west)
+        or (p.lon > limit_east)
+        or (p.lat < limit_south)
+        or (p.lat > limit_north)
+    ):
         return False
-    
+
     idx = point_to_index(p)
 
     ix, iy = idx
 
-    for probe_x in range(ix-2, ix+3):
-        for probe_y in range(iy-2, iy+3):
+    for probe_x in range(ix - 2, ix + 3):
+        for probe_y in range(iy - 2, iy + 3):
             probe_idx = (probe_x, probe_y)
             if probe_idx in background_grid:
                 for stored_point in background_grid[probe_idx]:
@@ -109,6 +115,7 @@ def can_insert_in_grid(p):
                         return False
     return True
 
+
 k = 30
 
 open_set = []
@@ -116,13 +123,17 @@ open_set = []
 added_points = []
 
 for p in pointlist:
-    if ((p.lon >= limit_west - 2) and (p.lon <= limit_east + 2) and
-        (p.lat >= limit_south - 2) and (p.lat <= limit_north + 2)):
-        #print ("found point:", p)
+    if (
+        (p.lon >= limit_west - 2)
+        and (p.lon <= limit_east + 2)
+        and (p.lat >= limit_south - 2)
+        and (p.lat <= limit_north + 2)
+    ):
+        # print ("found point:", p)
         open_set.append(p)
         insert_point_in_grid(p)
-    
-        
+
+
 while open_set:
     p_idx = random.randrange(len(open_set))
     p = open_set[p_idx]
@@ -136,9 +147,9 @@ while open_set:
     epsilon = 0.000001
 
     inserted = False
-    
+
     for j in range(k):
-        theta = 2*math.pi*(seed + float(j) / k)
+        theta = 2 * math.pi * (seed + float(j) / k)
         r = point_spacing + epsilon
         new_east = p.lon + r * math.cos(theta)
         new_north = p.lat + r * math.sin(theta)
@@ -159,11 +170,11 @@ while open_set:
         open_set.append(candidate_point)
         if len(added_points) >= count_to_add:
             break
-            
+
 print("Found %d new points" % len(added_points))
 
 for p in added_points:
     new_point = googlefetch.fetch(p.lat, p.lon)
     pointlist.append(new_point)
 
-point.write_pointlist_to_json('points.json', pointlist)
+point.write_pointlist_to_json("points.json", pointlist)

@@ -1,6 +1,6 @@
 import urllib.request
 
-#las_vegas_query = "http://epqs.nationalmap.gov/v1?x=36.1251958&y=-115.3150863&output=json&units=Meters"
+# las_vegas_query = "http://epqs.nationalmap.gov/v1?x=36.1251958&y=-115.3150863&output=json&units=Meters"
 
 
 las_vegas_query = "https://epqs.nationalmap.gov/v1/json?x=36&y=-115&wkid=4326&units=Meters&includeDate=false"

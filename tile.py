@@ -1,16 +1,16 @@
 import json
+import point
 
 
 class Tile:
     def __init__(self):
-        pass
-
+        self.verts_lat_lon = []
+        self.centroid_lat_lon = None
 
     def to_json(self, fn):
-        with open(fn, 'wt') as f:
+        with open(fn, "wt") as f:
             json_str = json.dumps(self.to_dict(), indent=2)
             f.write(json_str)
-
 
     def from_json(self, fn):
         with open(fn) as f:
@@ -20,15 +20,11 @@ class Tile:
     def to_dict(self):
         out_dict = {}
 
-
         # TODO add members
 
         return out_dict
 
     def from_dict(self, d):
-
         # TODO initialize from dict d
 
         pass
-
-    
