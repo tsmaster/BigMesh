@@ -5,6 +5,12 @@ import geopandas
 
 from pyrosm import get_data
 
+"""
+Download OSM data for states to OSM directory
+
+writes: OSM/
+"""
+
 fp = get_data("helsinki", directory="OSM")
 print("data was downloaded to", fp)
 

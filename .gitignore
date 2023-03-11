@@ -6,3 +6,5 @@ NaturalEarth/
 OSM/
 Osmosis/
 OsmConvert/
+
+__pycache__

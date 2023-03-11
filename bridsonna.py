@@ -4,6 +4,12 @@ import random
 import point
 import googlefetch
 
+"""
+Generates points for North America
+reads: points.json
+writes: points.json
+"""
+
 pointlist = point.read_pointlist_from_json("points.json")
 
 count_in_last_day = point.count_created_in_recent_hours(24, pointlist)

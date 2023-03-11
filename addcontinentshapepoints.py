@@ -1,27 +1,22 @@
 import math
-import random
+import shapefile
 
 import point
 
-# import usgsfetch
-import googlefetch
+""" 
+Pull in the boundary points of contents from continents shapefile
 
-
-"""
-Generates points for the world, outside North America
-reads: points.json
+reads: points.json, NaturalEarth/ne_110m_land.zip
 writes: points.json
 """
 
-
-
-
 pointlist = point.read_pointlist_from_json("points.json")
 
-# see bridsonna for logic
-# this gets points outside US and Canada
 
-point_spacing = 12.0
+# see bridsonna for logic
+# this gets points along continent edges
+
+point_spacing = 1.0
 
 cell_width = point_spacing / math.sqrt(2.0)
 
@@ -90,47 +85,52 @@ for p in pointlist:
         insert_point_in_grid(p)
 
 
-while open_set:
-    p_idx = random.randrange(len(open_set))
-    p = open_set[p_idx]
+sf = shapefile.Reader("NaturalEarth/ne_110m_land.zip")
 
-    # Martin Roberts' method:
-    # take k attempts to find a valid point
-    # spaced at our minimal acceptable distance
-    # in a random direction
+print("shapetype:", sf.shapeType)
+print("shape type name:", sf.shapeTypeName)
 
-    seed = random.random()
-    epsilon = 0.000001
+shapetype_dict = {0: "null", 1: "point", 3: "polyline", 5: "polygon"}
 
-    inserted = False
+if sf.shapeType in shapetype_dict:
+    print("shape type:", shapetype_dict[sf.shapeType])
 
-    for j in range(k):
-        theta = 2 * math.pi * (seed + float(j) / k)
-        r = point_spacing + epsilon
-        new_east = p.lon + r * math.cos(theta)
-        new_north = p.lat + r * math.sin(theta)
+print("num features:", len(sf))
+print("bbox", sf.bbox)
 
-        candidate_point = point.Point(new_north, new_east, None, None)
+shapes = sf.shapes()
 
-        if can_insert_in_grid(candidate_point):
-            print("inserting", candidate_point)
-            insert_point_in_grid(candidate_point)
-            inserted = True
-            break
+for shape_index in range(len(shapes)):
+    shp = sf.shape(shape_index)
+    print()
+    print("shape", shape_index)
+    print("  bbox", shp.bbox)
+    print("  oid", shp.oid)
+    print("  parts", shp.parts)
+    # print("  points", shp.points)
+    print("  shapeType", shp.shapeType)
+    print("  shapeTypeName", shp.shapeTypeName)
 
-    if not inserted:
-        del open_set[p_idx]
+    for sp in shp.points:
+        print("shape point", sp)
+        lon = sp[0]
+        lat = sp[1]
+        elv = -0.0001234
+        p = point.Point(lat, lon, elv, None)
 
-    else:
-        added_points.append(candidate_point)
-        open_set.append(candidate_point)
+        if can_insert_in_grid(p):
+            print("inserting coast point", p)
+            insert_point_in_grid(p)
+            added_points.append(p)
+
 
 print("Found %d new points" % len(added_points))
 
 for p in added_points:
     # new_point = usgsfetch.fetch(p.lat, p.lon)
-    new_point = googlefetch.fetch(p.lat, p.lon)
-    if new_point:
-        pointlist.append(new_point)
+    # new_point = googlefetch.fetch(p.lat, p.lon)
+    # if new_point:
+    #    pointlist.append(new_point)
+    pointlist.append(p)
 
 point.write_pointlist_to_json("points.json", pointlist)

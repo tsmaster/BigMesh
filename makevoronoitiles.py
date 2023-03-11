@@ -8,6 +8,19 @@ from PIL import Image, ImageDraw
 
 import bdgmath
 
+"""
+collects city data from state protocol buffer files, 
+sorts city by population,
+creates a bridson blue noise map starting with cities, populating with point spacing 1.0
+generates tile polygons using voronoi
+
+reads: OSM/*-latest.osm.pbf
+writes: 
+  map.png
+  Tiles/voronoi.json
+  Tiles/tile_*.json
+"""
+
 # from pyrosm import get_data
 
 # rainbow

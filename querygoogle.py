@@ -1,6 +1,9 @@
 import urllib.request
 import json
 
+"""
+Experiment to read points (incl random points) from Google Elevation API
+"""
 
 with open("api.key") as api_file:
     API_KEY = api_file.read().strip()

@@ -1,5 +1,9 @@
 import bdgmath
 
+"""
+Test to verify haversine functions make sense
+"""
+
 lat = 47
 lon = -122
 

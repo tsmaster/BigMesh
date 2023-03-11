@@ -1,0 +1,10 @@
+made a virtual environment
+python3 -m venv ./bigmesh_venv
+
+activate it
+source bigmesh_venv/bin/activate
+
+
+also?
+conda activate py3_10
+conda deactivate

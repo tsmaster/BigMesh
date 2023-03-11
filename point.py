@@ -2,6 +2,11 @@ import math
 import datetime
 import json
 
+"""
+data methods for vertices
+see also CapnProto/vertex.capnp
+"""
+
 
 class Point:
     def __init__(self, lat, lon, elv, creation_time):

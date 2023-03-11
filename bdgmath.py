@@ -1,5 +1,10 @@
 import math
 
+"""
+Math convenience functions
+"""
+
+
 # ----------------------------------------
 # generic convenience operators
 # ----------------------------------------

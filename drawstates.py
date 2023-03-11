@@ -6,6 +6,17 @@ from PIL import Image, ImageDraw
 from bdgmath import lat_lon_to_wm_xy
 import bdgmath
 
+"""
+experiment to draw state boundaries
+reads: 
+  NaturalEarth/ne_110m_land.zip
+  NaturalEarth/ne_110m_admin_1_states_provinces.zip
+  NaturalEarth/110m_physical.zip/ne_110m_lakes.shp
+  Tiles/voronoi.json
+writes: 
+  states.png
+"""
+
 west_limit = -125
 east_limit = -65
 north_limit = 50

@@ -2,6 +2,12 @@ import json
 import point
 
 
+"""
+Tile Class with methods
+See CapnProto/tile.capnp for serialization
+"""
+
+
 class Tile:
     def __init__(self):
         self.verts_lat_lon = []

@@ -1,0 +1,18 @@
+Each month, there is a $200 credit per account
+
+0 - 100,000 queries
+$0.005 per query = $5/1000 
+
+100,001 - 500,000 queries
+$0.004 per query
+
+https://developers.google.com/maps/documentation/elevation/usage-and-billing
+
+2000 queries = $10
+20000 queries = $100
+40000 queries = $200
+
+So, 40,000 queries a month is free
+1333 queries a day stays under the cap
+55 queries an hour
+Just a little less than one query per minute

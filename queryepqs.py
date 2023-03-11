@@ -1,5 +1,12 @@
 import urllib.request
 
+"""
+Experiment with EPQS elevation service
+
+(does not work?)
+"""
+
+
 # las_vegas_query = "http://epqs.nationalmap.gov/v1?x=36.1251958&y=-115.3150863&output=json&units=Meters"
 
 

@@ -4,6 +4,11 @@ import requests
 
 import point
 
+"""
+Experiment to query USGS for elevation data
+
+(returns null data, raises exception in JSON parsing)
+"""
 
 def fetch(lat, lon):
     q = "https://nationalmap.gov/epqs/pqs.php?y={}&x={}&output=json&units=Meters".format(
