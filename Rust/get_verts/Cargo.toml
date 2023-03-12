@@ -1,0 +1,11 @@
+[package]
+name = "get_verts"
+version = "0.1.0"
+authors = ["Dave <tsmaster@gmail.com>"]
+
+[[bin]]
+name = "get_verts"
+
+
+[dependencies]
+osmpbfreader = "0.16.0"

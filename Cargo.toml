@@ -1,0 +1,2 @@
+[workspace]
+members = ["Rust/get_verts"]
