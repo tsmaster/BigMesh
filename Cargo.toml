@@ -1,2 +1,2 @@
 [workspace]
-members = ["Rust/get_verts"]
+members = ["Rust/get_verts", "Rust/get_cities"]

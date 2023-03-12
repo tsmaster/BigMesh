@@ -7,6 +7,7 @@ import subprocess
 from PIL import Image, ImageDraw
 
 import bdgmath
+import city
 
 """
 collects city data from state protocol buffer files, 
@@ -88,16 +89,16 @@ def make_sea_to_bos():
     states = [
         "washington",
         "idaho",
-        # "montana",
-        # "north-dakota",
-        # "minnesota",
-        # "wisconsin",
-        # "illinois",
-        # "indiana",
-        # "ohio",
-        # "pennsylvania",
-        # "new-york",
-        # "massachusetts"
+        #"montana",
+        #"north-dakota",
+        #"minnesota",
+        #"wisconsin",
+        #"illinois",
+        #"indiana",
+        #"ohio",
+        #"pennsylvania",
+        #"new-york",
+        #"massachusetts"
     ]
 
     return [State(s) for s in states]
@@ -180,23 +181,23 @@ suffix = "-latest.osm.pbf"
 # TODO use proto repr for city, use city.py methods
 
 class City:
-    def __init__(self, name, state_name, lat, lon, pop):
+    def __init__(self, name, state_name, pop, vertid):
         self.name = name
         self.state_name = state_name
-        self.lat = lat
-        self.lon = lon
         self.pop = pop
+        self.vertid = vertid
+        self.city_id = city.make_city_id(name, state_name, 'United States of America')
 
     def __lt__(self, o):
         return self.pop < o.pop
 
     def __str__(self):
-        return "%s, %s (%f, %f) p: %d" % (
+        return "%s, %s p: %d v: %d cid: %s" % (
             self.name,
             self.state_name,
-            self.lat,
-            self.lon,
             self.pop,
+            self.vertid,
+            self.city_id
         )
 
     def __repr__(self):
@@ -207,6 +208,8 @@ class City:
 
 
 cities = []
+verts = []
+
 
 for s in states:
     print("state: %s (%s)" % (s.name, s.abbrev))
@@ -217,7 +220,7 @@ for s in states:
 
     print(p)
 
-    cmd = "./DrawMap/drawmap/target/release/drawmap " + p
+    cmd = "./target/release/get_cities " + p
     print(cmd)
 
     proc = subprocess.run(cmd.split(), capture_output=True)
@@ -229,31 +232,45 @@ for s in states:
     #    print(o)
 
     if proc.returncode == 0:
-        state_cities = []
-
         for line in out_lines:
-            # print(line)
+            #print(line)
             if line.startswith("Found a city:"):
                 # print(line)
                 m = re.search(
-                    'name="([A-Za-z ]+)" lat=([0-9\.-]*), lon=([0-9\.-]*), population=([0-9]+)',
+                    'name="([A-Za-z ]+)" population=([0-9]+) vertexid=([0-9]+)',
                     line,
                 )
                 # print ("city match?", m)
                 if m:
-                    # print(m[1])
-                    # print(m[2])
-                    # print(m[3])
-                    # print(m[4])
+                    #print(m[1])
+                    #print(m[2])
+                    #print(m[3])
 
                     name = m[1]
-                    lat = float(m[2])
-                    lon = float(m[3])
-                    pop = int(m[4])
+                    pop = int(m[2])
+                    vertid = int(m[3])
 
-                    city = City(name, s.name, lat, lon, pop)
-                    state_cities.append(city)
-                    print("city:", city)
+                    city_obj = City(name, s.name, pop, vertid)
+                    cities.append(city_obj)
+                    print("city:", city_obj)
+            elif line.startswith("vertex id:"):
+                #print(line)
+                m = re.search(
+                    'id: ([0-9]+) lon: ([0-9\.-]*) lat: ([0-9\.-]*)', line)
+                if m:
+                    #print(m[1])
+                    #print(m[2])
+                    #print(m[3])
+
+                    vertid = int(m[1])
+                    vertlon = float(m[2])
+                    vertlat = float(m[3])
+
+                    v = (vertid, vertlon, vertlat)
+                    print("vert:", v)
+                    verts.append(v)
+                else:
+                    print("no match!!")
 
     else:
         print("error")
@@ -269,3 +286,8 @@ print()
 
 for ci, c in enumerate(cities):
     print(ci, c)
+
+print()
+verts.sort()
+for v in verts:
+    print(v)

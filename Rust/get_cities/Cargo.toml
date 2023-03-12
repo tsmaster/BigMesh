@@ -1,0 +1,10 @@
+[package]
+name = "get_cities"
+version = "0.1.0"
+
+[[bin]]
+name = "get_cities"
+
+
+[dependencies]
+osmpbfreader = "0.16.0"
