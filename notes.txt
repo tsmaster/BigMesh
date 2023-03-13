@@ -90,3 +90,36 @@ distance table
 
 
 list of states touched
+
+----------------------------------------
+
+Making tiles using CapnProto flow notes:
+
+March 12 2023
+
+clear out all files in ProtoBin
+
+for each OSM protobuf we're interested in
+  collect city, vertex info (using getcities.py)
+  add city, verts to ProtoBin/cities.bin, ProtoBin/verts_city.bin
+  if we have state info
+    try to get state bbox
+    store states into ProtoBin/states.bin
+    (how to handle California?)
+
+
+pull all cities from ProtoBin/cities.bin
+filter by bbox?
+sort by pop
+place city verts as seeds for Bridson, not allowing too close
+bridson to generate remaining verts
+  dynamic distance
+    if v is in US, 1 degree
+    elif v is in North America, 5 deg
+    else 15 deg
+    (maybe some sort of fuzzy distance if you're close?)
+store ProtoBin/verts_bridson.bin    
+voronoi on generated verts to get polygons
+
+store polygons to ProtoBin/tiles.bin
+store polygon verts to ProtoBin/verts_tiles.bin

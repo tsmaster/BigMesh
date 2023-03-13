@@ -18,8 +18,8 @@ struct State {
 
   bboxDeg @4 :BBoxDeg;
 
-  cityIds @5 :List(UInt32);
-  countryId @6 :UInt32;
+  cityIds @5 :List(Text); # use the idStr
+  countryId @6 :Text; # use the country abbrev
 
   tileIds @7 :List(UInt32);
 }

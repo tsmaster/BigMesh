@@ -10,18 +10,16 @@ from PIL import Image, ImageDraw
 
 import capnp
 import CapnProto.geog_capnp as pr_geog
-import CapnProto.city_capnp as pr_city
-import CapnProto.vertex_capnp as pr_vertex
 
 import bdgmath
 import city
-import country
 
 """
-collects city data from state protocol buffer files, 
-sorts city by population
+collects state data from state protocol buffer files, 
+writes to CapnProto protocol buffers
 
 reads: OSM/*-latest.osm.pbf
+writes: ProtoBin/states.bin
 """
 
 stateToAbbrevDict = {
@@ -76,6 +74,31 @@ stateToAbbrevDict = {
     "Wisconsin": "WI",
     "Wyoming": "WY",
 }
+
+
+osm_rel_path = "OSM"
+osm_suffix = "-latest.osm.pbf"
+
+
+
+def make_state_proto_filenames(statename):
+    statename = statename.lower()
+    statenames = [statename]
+
+    if statename == 'california':
+        statenames = ['norcal', 'socal']
+
+    fns = []
+
+    for sn in statenames:
+        sn = sn.replace(' ', '-')
+        p = os.path.join(osm_rel_path, sn + osm_suffix)
+
+        fns.append(p)
+
+        
+    return fns
+    
 
 # TODO: use capnp state repr, state.py methods
 
@@ -198,7 +221,7 @@ if len(sys.argv) > 1:
             states.append(s)
             
 else:
-    if True:
+    if False:
         states = make_continental_us()
     else:
         states = make_sea_to_bos()
@@ -246,7 +269,7 @@ def read_state_protos():
 
     with open(sp_fn, 'rb') as f:
         for state in pr_geog.State.read_multiple(f):
-            state_dict[state.abbreviation] = state.as_builder()
+            state_dict[state.abbreviation] = state
 
     return state_dict
 
@@ -255,87 +278,101 @@ def write_state_protos(d):
 
     with open(sp_fn, 'wb') as f:
         for k,v in d.items():
-            print("writing state", k)
+            print("writing", k)
             v.write(f)
+            
+def make_states():
+    sd = {}
+    for state_name, state_abbrev in stateToAbbrevDict.items():
+        print("state: {} ({})".format(state_name, state_abbrev))
+
+        fns = make_state_proto_filenames(state_name)
+
+        print("files:", fns)
+
+        min_lat, max_lat, min_lon, max_lon = None, None, None, None
+        
+        for f_idx, f in enumerate(fns):
+            assert(os.path.exists(f))
+
+            # get bbox
+            
+            cmd = "./CalcBBox/calcbbox/target/release/calcbbox " + f
+            print(cmd)
+
+            proc = subprocess.run(cmd.split(), capture_output=True)
+
+            print("returncode:", proc.returncode)
+
+            if proc.returncode == 0:
+                out_lines = str(proc.stdout, "UTF-8").split("\n")
+                #print("lines:", out_lines)
+
+                lats = out_lines[5].strip().split()
+                lons = out_lines[6].strip().split()
+
+                print ("lats", lats)
+                print ("lons", lons)
+
+                if f_idx == 0:
+                    min_lat = float(lats[1])
+                    max_lat = float(lats[2])
+                    min_lon = float(lons[1])
+                    max_lon = float(lons[2])
+                else:
+                    min_lat = min(min_lat, float(lats[1]))
+                    max_lat = max(max_lat, float(lats[2]))
+                    min_lon = min(min_lon, float(lons[1]))
+                    max_lon = max(max_lon, float(lons[2]))
+
+        bbox = pr_geog.BBoxDeg.new_message()
+        bbox.minLon = min_lon
+        bbox.minLat = min_lat
+        bbox.maxLon = max_lon
+        bbox.maxLat = max_lat
+
+        print("bbox:", bbox)
+
+        s = pr_geog.State.new_message()
+
+        s.id = len(sd) + 1
+        s.name = state_name
+        s.abbreviation = state_abbrev
+        s.countryId = 'USA'
+        s.bboxDeg = bbox
+        sd[s.abbreviation] = s
+
+    return sd
 
 
+sd = make_states()
 
-def read_city_protos():
-    cp_fn = "ProtoBin/cities.bin"
+write_state_protos(sd)
+
+sd = read_state_protos()
+
+for s_key, s in sd.items():
+    print(s_key)
+    print(s)
+    print()
+
+exit(-1)
+
+            
     
-    if not (os.path.exists(cp_fn)):
-        return {}
-
-    city_dict = {}
-
-    with open(cp_fn, 'rb') as f:
-        for city in pr_city.City.read_multiple(f):
-            city_dict[city.idStr] = city.as_builder()
-
-    return city_dict
-
-def write_city_protos(d):
-    cp_fn = "ProtoBin/cities.bin"
-
-    with open(cp_fn, 'wb') as f:
-        for k,v in d.items():
-            print("writing city", k)
-            print(type(v), v)
-            v.clear_write_flag()            
-            v.write(f)
-
-
-# TODO more kinds of vertices
-
-def read_vert_protos():
-    vp_fn = "ProtoBin/verts_city.bin"
-    
-    if not (os.path.exists(vp_fn)):
-        return {}
-
-    vert_dict = {}
-
-    with open(vp_fn, 'rb') as f:
-        for vert in pr_vertex.Vertex.read_multiple(f):
-            vert_dict[(vert.desc.id, vert.desc.source)] = vert.as_builder()
-
-    return vert_dict
-
-def write_vert_protos(d):
-    vp_fn = "ProtoBin/verts_city.bin"
-
-    with open(vp_fn, 'wb') as f:
-        for k,v in d.items():
-            print("writing vert", k)
-            v.write(f)
 
 state_protos = read_state_protos()
 city_protos = read_city_protos()
-vert_protos = read_vert_protos()
-
-cities_by_state = {} # dictionary mapping from state abbrev to list of city ids
-
-if not state_protos:
-    print("ProtoBin/states.bin must exist.")
-    print("run makestates.py to generate it.")
-    exit(-1)
+vert_protos = readd_vert_protos()
 
 
 for s in states:
     print("state: %s (%s), %s" % (s.name, s.abbrev, s.country_name))
 
-    state_proto_obj = None
-    state_city_abbrevs = []
-    
     if s.country_name == "United States of America":
         print ("is state")
-        state_proto_obj = state_protos[s.abbrev]
-
-        print("found state proto obj")
-        print(state_proto_obj)
-        state_city_abbrevs = [x for x in state_proto_obj.cityIds]
-    else:
-        print("not a state")
+        
+    # fp = get_data(s, directory=rel_path)
 
     p = os.path.join(rel_path, s.osm_filename + suffix)
 
@@ -370,37 +407,13 @@ for s in states:
                     vertid = int(m[3])
 
                     city_obj = City(name, s.name, s.country_name, pop, vertid)
-                    for nc in city_obj.city_id:
-                        if nc not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_':
+                    for c in city_obj.city_id:
+                        if c not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_':
                             print("parsing", name)
-                            print("bad char:", nc)
+                            print("bad char:", c)
                             exit(-1)
-
-                    if not (city_obj.city_id in city_protos):
-                        city_proto_obj = pr_city.City.new_message()
-                        city_proto_obj.id = len(city_protos) + 1
-                        city_proto_obj.name = name
-                        city_proto_obj.idStr = city_obj.city_id
-                        if state_proto_obj:
-                            city_proto_obj.state = state_proto_obj.abbreviation
-                        city_proto_obj.country = country.get_country_id(s.country_name)
-
-                        v = pr_vertex.VertDesc.new_message()
-                        v.id = vertid
-                        v.source = pr_vertex.VertDesc.Source.osm
-                        city_proto_obj.positionVertex = v
-
-                        city_proto_obj.population = pop
-                    
-                        cities.append(city_obj)
-                        city_protos[city_obj.city_id] = city_proto_obj
-                        print("city:", city_obj)
-                        print("city_proto_obj:", city_proto_obj)
-                        if city_obj.city_id not in state_city_abbrevs:
-                            state_city_abbrevs.append(city_obj.city_id)
-                            state_city_abbrevs.sort()
-                    else:
-                        print("{} already exists".format(city_obj.city_id))
+                    cities.append(city_obj)
+                    print("city:", city_obj)
             elif line.startswith("vertex id:"):
                 #print(line)
                 m = re.search(
@@ -417,32 +430,8 @@ for s in states:
                     v = (vertid, vertlon, vertlat)
                     print("vert:", v)
                     verts.append(v)
-
-                    # TODO see if vert already exists
-
-                    vert_desc = pr_vertex.VertDesc.new_message()
-                    vert_desc.id = vertid
-                    vert_desc.source = pr_vertex.VertDesc.Source.osm
-
-                    v_tag = (vert_desc.id, vert_desc.source)
-
-                    if (not (v_tag in vert_protos)):
-                        vert_obj = pr_vertex.Vertex.new_message()
-                        vert_obj.desc = vert_desc
-                        vert_obj.lonDeg = vertlon
-                        vert_obj.latDeg = vertlat
-                        
-                        vert_protos[v_tag] = vert_obj
-                        print("adding vert obj:", vert_obj)
-                    else:
-                        print("vert tag {} already in dict".format(v_tag))
                 else:
                     print("no match!!")
-
-        if state_proto_obj:
-            print("adding cities {} to {}".format(
-                state_city_abbrevs, state_proto_obj.abbreviation))
-            state_proto_obj.cityIds = state_city_abbrevs
 
     else:
         print("error")
@@ -450,6 +439,16 @@ for s in states:
         for e in err_lines:
             print("ERR:  ", e)
 
-write_state_protos(state_protos)            
-write_city_protos(city_protos)
-write_vert_protos(vert_protos)
+cities.sort()
+cities = cities[::-1]
+
+print()
+print()
+
+for ci, c in enumerate(cities):
+    print(ci, c)
+
+print()
+verts.sort()
+for v in verts:
+    print(v)

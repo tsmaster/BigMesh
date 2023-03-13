@@ -17,7 +17,9 @@ class City:
         self.population = population
         self.elevation = elevation
 
-
+rewrite_chars = {
+    'Ñ': 'N'
+}
 
 def make_city_id(city_name, state_name, country_name):
     if state_name:
@@ -35,8 +37,10 @@ def make_city_id(city_name, state_name, country_name):
     out += city_name[0]
     city_name = city_name[1:]
     for c in city_name:
-        if c in 'AEIOU ':
+        if c in "AEIOU '’-.()ÁÈÉÍÓÔŎÚ":
             continue
+        if c in rewrite_chars.keys():
+            c = rewrite_chars[c]
         if c == out[-1]:
             continue
         out = out + c

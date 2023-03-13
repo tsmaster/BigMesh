@@ -19,16 +19,22 @@ fn main() {
                     (node.tags.contains("place", "town")) {
                         let mut population = 0;
 
+                        //println!("tags: {:?}", node.tags);
+
                         if node.tags.contains_key("population") {
-                            //println!("{:?}",node);
+                            //println!("pop {:?}",node);
                             let popstr = node.tags.get("population").unwrap();
                             let popstr = popstr.replace(',', "");
-                            population = popstr.parse::<i32>().unwrap();
+                            population = popstr.parse::<i32>().unwrap_or_default();
                         }
                         
                         // Only collect cities with a population of 50,000 or greater
                         if population >= MIN_POP {
-                            let name = node.tags.get("name").unwrap();
+                            let mut name = node.tags.get("name").unwrap();
+                            if node.tags.contains_key("name:en") {
+                                name = node.tags.get("name:en").unwrap();
+                            }
+                                
                             println!("Found a city: name={:?} population={} vertexid={}",
                                      name, population, node.id.0);
                             println!("vertex id: {} lon: {} lat: {}", node.id.0, node.lon(), node.lat());

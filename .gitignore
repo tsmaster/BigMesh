@@ -7,4 +7,9 @@ OSM/
 Osmosis/
 OsmConvert/
 
+target/
+Cargo.lock
+
+
+
 __pycache__

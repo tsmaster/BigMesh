@@ -64,4 +64,5 @@ def get_state_id(state_name):
     if state_name in state_dict:
         return state_dict[state_name]
     else:
-        raise ValueError("cannot find " + state_name)
+        #raise ValueError("cannot find " + state_name)
+        return None

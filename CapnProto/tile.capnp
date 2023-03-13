@@ -12,9 +12,9 @@ using import "geog.capnp".Boundary;
 struct Tile {
   id @0 :UInt32;
   name @1 :Text;
-  cities @2 :List(City); # Are cities contained in tiles?
-  stateIds @3 :List(UInt32);
-  countryIds @4 :List(UInt32);
+  cities @2 :List(Text); # use city idStr
+  stateIds @3 :List(Text); # use state abbr
+  countryIds @4 :List(Text); # use country abbr
 
   roads @5 :List(Road);
   boundaries @6 :List(Boundary);
